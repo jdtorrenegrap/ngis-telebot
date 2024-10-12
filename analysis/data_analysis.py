@@ -44,11 +44,11 @@ def analyze_trends(data):
     """
 
     df = pd.DataFrame(data)
-     # Seleccionamos las columnas que vamos a usar
+    # Seleccionamos las columnas que vamos a usar
     df_relevant = df[['value', 'unit_id', 'device_id', 'created_at']]
     # Convertir la columna de created_at a datetime
-    df_relevant.loc[:, 'created_at'] = pd.to_datetime(df_relevant['created_at'])
-    # Agrupamo por día, unidad y dispositivo, y calculamos estadística diaria
+    df_relevant['created_at'] = pd.to_datetime(df_relevant['created_at'])
+    # Agrupamos por día, unidad y dispositivo, y calculamos estadística diaria
     daily_trends = df_relevant.set_index('created_at').groupby(['device_id', 'unit_id']).resample('D').agg({
         'value': ['mean', 'min', 'max', 'std']
     }).reset_index()
@@ -76,7 +76,6 @@ def analyze_trends(data):
         )
 
     return result
-
 def compare_sensors(data):
     """
     Comparar datos entre diferentes sensores para detectar diferencias significativas

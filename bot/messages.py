@@ -7,7 +7,6 @@ from telebot import TeleBot
 load_dotenv()
 GET_READS = os.getenv('GET_READS')
 GET_ALERT = os.getenv('GET_ALERT')
-KNOW = os.getenv('KNOW')
 
 def send_welcome(bot: TeleBot, message):
     
@@ -22,8 +21,7 @@ def send_welcome(bot: TeleBot, message):
         "4. Analiza tendencias temporales:\n"
         "/trend\n"
         "5. Analiza datos de los sensores:\n"
-        "/analyze\n"
-        f"Para más información sobre los análisis realizados por Senda, haz clic {KNOW}\n\n"   
+        "/analyze\n\n"
     )
     bot.reply_to(message, welcome_message, parse_mode = "Markdown")
 
@@ -39,10 +37,9 @@ def send_option(bot: TeleBot, message):
         "4. Analiza tendencias temporales:\n"
         "/trend\n"
         "5. Analiza datos de los sensores:\n"
-        "/analyze\n"
-        f"Para más información sobre los análisis realizados por Senda, haz clic {KNOW}\n\n"
+        "/analyze\n\n"
     )
-    bot.reply_to(message, options_message, parse_mode = "Markdown")
+    bot.reply_to(message, options_message)
 
 def get_reads(bot: TeleBot, message):
     send_initial_message = lambda: bot.reply_to(message, "👩‍🌾 Senda\nObteniendo la última lectura de cada dispositivo...")
@@ -71,14 +68,17 @@ def get_alerts(bot: TeleBot, message):
 
     alert_data = fetch_data(GET_ALERT)
     if alert_data:
-        latest_alert = alert_data
-        result = "👩‍🌾 Senda\nAlerta Configurada:\n\n"
-        for alert in latest_alert:
-            if isinstance(alert, list) and len(alert) >= 3: #verifico si es una lista y si la longitud es al menos 3
+        result = "👩‍🌾 Senda\nAlertas Configuradas:\n\n"
+        for alert in alert_data:
+            if isinstance(alert, dict):  # Verifico si es un diccionario
+                temperature = alert.get("temperature", "Dato no disponible")
+                air_humidity = alert.get("air_humidity", "Dato no disponible")
+                soil_humidity = alert.get("soil_humidity", "Dato no disponible")
+
                 result += (
-                    f"  - Temperatura: mayor a {alert[0]}°C\n"
-                    f"  - Humedad: mayor a {alert[1]}%\n"
-                    f"  - Humedad del suelo: menor a {alert[2]}%\n\n"
+                    f"  - Temperatura: {temperature}°C\n"
+                    f"  - Humedad: {air_humidity}%\n"
+                    f"  - Humedad del suelo: {soil_humidity}%\n\n"
                 )
             else:
                 result += "👩‍🌾 Senda\nAlerta:\n  - Dato no disponible\n\n"
