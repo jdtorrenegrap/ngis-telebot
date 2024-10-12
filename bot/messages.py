@@ -18,6 +18,7 @@ def send_welcome(bot: TeleBot, message):
     bot.reply_to(message, welcome_message)
 
 def get_reads(bot: TeleBot, message):
+
     send_initial_message = lambda: bot.reply_to(message, "Obteniendo las últimas 5 lecturas...")
     send_initial_message()
 
@@ -26,23 +27,12 @@ def get_reads(bot: TeleBot, message):
         latest_readings = reading_data[-5:]
         result = "Últimos datos:\n\n"
         for i, reading in enumerate(latest_readings, 1):
-            device_id = reading.get('device_id', 'N/A')
-            unit_id = reading.get('unit_id', 'N/A')
-            value = reading.get('value', 'N/A')
-            created_at = reading.get('created_at', 'N/A')
-
-            # Determinar la unidad basada en el tipo de sensor
-            if 'temperature' in device_id.lower():
-                value = f"{value} °C"
-            elif 'humidity' in device_id.lower():
-                value = f"{value} %"
-
             result += (
                 f"Lectura {i}:\n"
-                f"  - Sensor: {device_id}\n"
-                f"  - Unidad: {unit_id}\n"
-                f"  - Valor: {value}\n"
-                f"  - Fecha: {created_at}\n\n"
+                f"  - Sensor: {reading.get('device_id', 'N/A')}\n"
+                f"  - Unidad: {reading.get('unit_id', 'N/A')}\n"
+                f"  - Valor: {reading.get('value', 'N/A')}\n"
+                f"  - Fecha: {reading.get('created_at', 'N/A')}\n\n"
             )
         bot.reply_to(message, result)
     else:
