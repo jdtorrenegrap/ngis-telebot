@@ -1,6 +1,19 @@
 import pandas as pd
 from scipy.stats import f_oneway
 
+def latest_readings(data):
+    """
+    Obtener las últimas lecturas
+    """
+
+    df = pd.DataFrame(data)
+    # Convertir la columna de created_at a datetime
+    df['created_at'] = pd.to_datetime(df['created_at'])
+    # Obtener la última lectura para cada combinación de unit_id y device_id
+    result = df.sort_values('created_at').groupby(['unit_id', 'device_id']).tail(1)
+
+    return result
+
 def sensor_analysis(data):
     """
     Análisis descriptivo de los datos proporcionados
@@ -17,19 +30,18 @@ def sensor_analysis(data):
     # Encontrar el sensor que más datos recolectó
     sensor_plus_data = df_relevant['device_id'].value_counts().idxmax()
 
-    # Formatear el resultado
-    result = "Análisis descriptivo de lecturas:\n\n"
-    result += "Estadísticas descriptivas:\n"
-    result += f"  - Número de lecturas: {stats['count']:.0f}\n"
-    result += f"  - Promedio de valores: {stats['mean']:.2f}\n"
-    result += f"  - Desviación estándar: {stats['std']:.2f}\n"
-    result += f"  - Valor mínimo: {stats['min']:.2f}\n"
-    result += f"  - Porcentaje 25: {stats['25%']:.2f}\n"
-    result += f"  - Porcentaje 50: {stats['50%']:.2f}\n"
-    result += f"  - Porcentaje 75: {stats['75%']:.2f}\n"
-    result += f"  - Valor máximo: {stats['max']:.2f}\n\n"
-    result += f"El sensor que más datos recolectó fue: {sensor_plus_data}\n"
-
+        # Formatear el resultado
+    result = "📊 Análisis Descriptivo de Lecturas 📊\n\n"
+    result += "🔍 Estadísticas Descriptivas:\n"
+    result += f"  - Número de Lecturas: {stats['count']:.0f}\n"
+    result += f"  - Promedio de Valores: {stats['mean']:.2f}\n"
+    result += f"  - Desviación Estándar: {stats['std']:.2f}\n"
+    result += f"  - Valor Mínimo: {stats['min']:.2f}\n"
+    result += f"  - Percentil 25: {stats['25%']:.2f}\n"
+    result += f"  - Mediana (Percentil 50): {stats['50%']:.2f}\n"
+    result += f"  - Percentil 75: {stats['75%']:.2f}\n"
+    result += f"  - Valor Máximo: {stats['max']:.2f}\n\n"
+    result += f"📈 El sensor que más datos recolectó fue: {sensor_plus_data}\n"
     return result
 
 def analyze_trends(data):
@@ -40,10 +52,10 @@ def analyze_trends(data):
     df = pd.DataFrame(data)
 
     # Seleccionar las columnas relevantes
-    df_relevant = df[['created_at', 'value', 'unit_id', 'device_id']]
+    df_relevant = df[['value', 'unit_id', 'device_id', 'created_at']]
 
-    # Convertir la columna de created_at a datetime
-    df_relevant['created_at'] = pd.to_datetime(df_relevant['created_at'])
+    # Convertir la columna de created_at a datetime usando .loc para evitar SettingWithCopyWarning
+    df_relevant.loc[:, 'created_at'] = pd.to_datetime(df_relevant['created_at'])
 
     # Agrupar por día, unidad y dispositivo, y calcular estadísticas diarias
     daily_trends = df_relevant.set_index('created_at').groupby(['device_id', 'unit_id']).resample('D').agg({
@@ -53,12 +65,24 @@ def analyze_trends(data):
     # Aplanar el índice jerárquico
     daily_trends.columns = ['device_id', 'unit_id', 'created_at', 'mean', 'min', 'max', 'std']
 
+    # Agrupar por sensor y unidad para obtener estadísticas generales
+    overall_trends = daily_trends.groupby(['device_id', 'unit_id']).agg({
+        'mean': 'mean',
+        'min': 'min',
+        'max': 'max',
+        'std': 'mean'
+    }).reset_index()
+
     # Formatear el resultado
-    result = "Tendencias temporales por sensor y unidad:\n\n"
-    for (device_id, unit_id), group in daily_trends.groupby(['device_id', 'unit_id']):
-        result += f"Sensor: {device_id}, Unidad: {unit_id}\n"
-        result += group[['created_at', 'mean', 'min', 'max', 'std']].to_string(index=False, header=['Fecha', 'Promedio', 'Mínimo', 'Máximo', 'Desviación Estándar'])
-        result += "\n\n"
+    result = "📈 Tendencias Temporales por Sensor y Unidad 📈\n\n"
+    for _, row in overall_trends.iterrows():
+        result += (
+            f"🔹 Sensor: {row['device_id']}, Unidad: {row['unit_id']}\n"
+            f"  - Promedio Diario: {row['mean']:.2f}\n"
+            f"  - Valor Mínimo Diario: {row['min']:.2f}\n"
+            f"  - Valor Máximo Diario: {row['max']:.2f}\n"
+            f"  - Desviación Estándar Diaria: {row['std']:.2f}\n\n"
+        )
 
     return result
 
@@ -79,17 +103,22 @@ def compare_sensors(data):
     anova_result = f_oneway(*grouped)
 
     # Formatear el resultado
-    result = "Comparación entre sensores:\n\n"
-    result += "Resultados de la prueba ANOVA:\n"
+    result = "📊 Comparación entre Sensores 📊\n\n"
+    result += "🔍 Resultados de la Prueba ANOVA:\n"
     result += f"  - Estadístico F: {anova_result.statistic:.2f}\n"
     result += f"  - Valor p: {anova_result.pvalue:.2e}\n\n"
 
     if anova_result.pvalue < 0.05:
-        result += "Conclusión: Hay diferencias significativas entre los sensores.\n\n"
-        result += "Detalles por sensor:\n"
+        result += "✅ Conclusión: Hay diferencias significativas entre los sensores.\n\n"
+        result += "📋 Detalles por Sensor:\n"
         for sensor, values in grouped.items():
-            result += f"  - Sensor {sensor}: {len(values)} lecturas, promedio {pd.Series(values).mean():.2f}, desviación estándar {pd.Series(values).std():.2f}\n"
+            result += (
+                f"  - Sensor {sensor}:\n"
+                f"    - Número de Lecturas: {len(values)}\n"
+                f"    - Promedio: {pd.Series(values).mean():.2f}\n"
+                f"    - Desviación Estándar: {pd.Series(values).std():.2f}\n"
+            )
     else:
-        result += "Conclusión: No hay diferencias significativas entre los sensores.\n"
+        result += "❌ Conclusión: No hay diferencias significativas entre los sensores.\n"
 
     return result
