@@ -41,8 +41,6 @@ def send_option(bot: TeleBot, message):
         "5. Analiza datos de los sensores:\n"
         "/analyze\n"
         f"Para más información sobre los análisis realizados por Senda, haz clic {KNOW}\n\n"
-        
-        "Por favor, selecciona una opción escribiendo el comando correspondiente."
     )
     bot.reply_to(message, options_message, parse_mode = "Markdown")
 
