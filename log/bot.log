@@ -1,0 +1,7 @@
+2024-10-11 21:52:10,008 - ERROR - HTTP error occurred while fetching data from https://ngis-api.onrender.com/get_reads7: 404 Client Error: Not Found for url: https://ngis-api.onrender.com/get_reads7
+2024-10-11 21:52:10,292 - ERROR - HTTP error occurred while fetching data from https://ngis-api.onrender.com/get_reads7: 404 Client Error: Not Found for url: https://ngis-api.onrender.com/get_reads7
+2024-10-11 22:53:05,049 - ERROR - HTTP error occurred while fetching data from https://ngis-api-production-e9ea.up.railway.app/reads: 405 Client Error: Method Not Allowed for url: https://ngis-api-production-e9ea.up.railway.app/reads
+2024-10-11 22:53:15,064 - ERROR - HTTP error occurred while fetching data from https://ngis-api-production-e9ea.up.railway.app/reads: 405 Client Error: Method Not Allowed for url: https://ngis-api-production-e9ea.up.railway.app/reads
+2024-10-11 22:55:14,634 - ERROR - HTTP error occurred while fetching data from https://ngis-api-production-e9ea.up.railway.app/reads: 405 Client Error: Method Not Allowed for url: https://ngis-api-production-e9ea.up.railway.app/reads
+2024-10-11 22:56:14,255 - ERROR - HTTP error occurred while fetching data from https://ngis-api-production-e9ea.up.railway.app/reads: 405 Client Error: Method Not Allowed for url: https://ngis-api-production-e9ea.up.railway.app/reads
+2024-10-11 22:56:43,789 - ERROR - HTTP error occurred while fetching data from https://ngis-api-production-e9ea.up.railway.app/reads: 405 Client Error: Method Not Allowed for url: https://ngis-api-production-e9ea.up.railway.app/reads
