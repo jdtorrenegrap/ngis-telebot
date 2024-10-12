@@ -5,32 +5,26 @@ def latest_readings(data):
     """
     Obtener las últimas lecturas
     """
-
     df = pd.DataFrame(data)
     # Convertir la columna de created_at a datetime
     df['created_at'] = pd.to_datetime(df['created_at'])
-    # Obtener la última lectura para cada combinación de unit_id y device_id
+    # Obtenemos la última lectura
     result = df.sort_values('created_at').groupby(['unit_id', 'device_id']).tail(1)
-
     return result
 
 def sensor_analysis(data):
     """
     Análisis descriptivo de los datos proporcionados
     """
-
     df = pd.DataFrame(data)
-
-    # Seleccionar las columnas relevantes
+     # Seleccionamos las columnas que vamos a usar
     df_relevant = df[['device_id', 'unit_id', 'value']]
-
-    # Obtener estadísticas descriptivas
+    # Realizamos una estadísticas descriptiva
     stats = df_relevant['value'].describe()
-
-    # Encontrar el sensor que más datos recolectó
+    # Buscamos el sensor que más datos recolectó
     sensor_plus_data = df_relevant['device_id'].value_counts().idxmax()
 
-        # Formatear el resultado
+    # Formateaamos el resultado
     result = "📊 Análisis Descriptivo de Lecturas 📊\n\n"
     result += "🔍 Estadísticas Descriptivas:\n"
     result += f"  - Número de Lecturas: {stats['count']:.0f}\n"
@@ -50,14 +44,11 @@ def analyze_trends(data):
     """
 
     df = pd.DataFrame(data)
-
-    # Seleccionar las columnas relevantes
+     # Seleccionamos las columnas que vamos a usar
     df_relevant = df[['value', 'unit_id', 'device_id', 'created_at']]
-
-    # Convertir la columna de created_at a datetime usando .loc para evitar SettingWithCopyWarning
+    # Convertir la columna de created_at a datetime
     df_relevant.loc[:, 'created_at'] = pd.to_datetime(df_relevant['created_at'])
-
-    # Agrupar por día, unidad y dispositivo, y calcular estadísticas diarias
+    # Agrupamo por día, unidad y dispositivo, y calculamos estadística diaria
     daily_trends = df_relevant.set_index('created_at').groupby(['device_id', 'unit_id']).resample('D').agg({
         'value': ['mean', 'min', 'max', 'std']
     }).reset_index()
@@ -73,7 +64,7 @@ def analyze_trends(data):
         'std': 'mean'
     }).reset_index()
 
-    # Formatear el resultado
+    # Formateamos los resultados
     result = "📈 Tendencias Temporales por Sensor y Unidad 📈\n\n"
     for _, row in overall_trends.iterrows():
         result += (
@@ -92,17 +83,13 @@ def compare_sensors(data):
     """
 
     df = pd.DataFrame(data)
-
-    # Seleccionar las columnas relevantes
+    # Seleccionamos las columnas que vamos a usar
     df_relevant = df[['device_id', 'value']]
-
     # Agrupar los datos por sensor
     grouped = df_relevant.groupby('device_id')['value'].apply(list)
-
     # Realizar la prueba ANOVA para detectar diferencias significativas
     anova_result = f_oneway(*grouped)
-
-    # Formatear el resultado
+    # Formateamos el resultado
     result = "📊 Comparación entre Sensores 📊\n\n"
     result += "🔍 Resultados de la Prueba ANOVA:\n"
     result += f"  - Estadístico F: {anova_result.statistic:.2f}\n"
