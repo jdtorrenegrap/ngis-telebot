@@ -4,14 +4,11 @@ from dotenv import load_dotenv
 from telebot import TeleBot, types
 from bot.messages import get_analyze, get_sensor, get_trend, send_welcome, get_reads, get_alerts
 
-# Cargar las variables de entorno desde el archivo .env
 load_dotenv()
 
-# Obtener las variables de entorno
 TOKEN = os.getenv('TOKEN')
 WEBHOOK_URL = os.getenv('WEBHOOK_URL')
 
-# Verificar que el token se haya cargado correctamente
 if TOKEN is None:
     raise ValueError("El token del bot no se ha encontrado en las variables de entorno.")
 
@@ -62,14 +59,14 @@ def handle_get_analyze(message):
 
 @bot.message_handler(func=lambda message: True)
 def handle_all_messages(message):
-    bot.reply_to(message,
-                 "👩‍🌾 Senda\nNo reconozco ese comando. Por favor, usa uno de los siguientes comandos:\n\n"
-                 "1️⃣/consult\n"
-                 "2️⃣/alert\n"
-                 "3️⃣/get\n"
-                 "4️⃣/trend\n"
-                 "5️⃣/analyze\n"
-                 )
+    bot.reply_to(message, "👩‍🌾 Senda\n¡Oh no! No reconozco ese comando. Por favor, elige uno de los siguientes para que pueda ayudarte:\n\n"
+                     "1️⃣ /consult  - Consulta información\n"
+                     "2️⃣ /alert    - Establece alertas\n"
+                     "3️⃣ /get      - Obtén datos\n"
+                     "4️⃣ /trend    - Ver tendencias\n"
+                     "5️⃣ /analyze  - Realiza un análisis\n\n"
+                     "¡Estoy aquí para ayudarte en lo que necesites!")
+
 @app.get("/validate")
 def read_root():
     return {"message": "Bot corriendo"}

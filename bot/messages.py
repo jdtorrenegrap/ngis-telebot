@@ -12,7 +12,7 @@ KNOW= os.getenv('KNOW')
 def send_welcome(bot: TeleBot, message):
     
     welcome_message = (
-                "👩‍🌾¡Hola! Soy Senda, tu asistente. Para obtener información sobre el sistema Ngis, utiliza estos comandos fáciles:\n\n"
+                "👩‍🌾¡Hola! Soy Senda, tu asistente. Para obtener información sobre el sistema Ngis, utiliza estos comandos:\n\n"
                 "1️⃣ Consultar lecturas de sensores:\n"
                 "/consult\n"
                 "2️⃣ Revisar alertas configuradas:\n"
@@ -55,14 +55,14 @@ def get_reads(bot: TeleBot, message):
         result = "👩‍🌾 Senda\nDatos obtenidos:\n\n"
         for _, reading in latest_readings_data.iterrows():
             result += (
-                f"- Dispositivo: {reading['device_id']}\n"
-                f"- Unidad: {reading['unit_id']}\n"
-                f"- Valor: {reading['value']}\n"
-                f"- Fecha: {reading['created_at']}\n\n"
+                f"Dispositivo: {reading['device_id']}\n"
+                f" ⚙️Unidad: {reading['unit_id']}\n"
+                f" 🔢Valor: {reading['value']}\n"
+                f" 📅Fecha: {reading['created_at']}\n\n"
             )
         bot.reply_to(message, result)
     else:
-        bot.reply_to(message, "👩‍🌾 Senda\nOcurrió un error al obtener los datos.")
+        bot.reply_to(message, "👩‍🌾 ¡Ups! Parece que hubo un pequeño error al obtener los datos.")
 
 def get_alerts(bot: TeleBot, message):
     send_initial_message = lambda: bot.reply_to(message, "👩‍🌾 Senda\nObteniendo alerta configurada...")
@@ -78,9 +78,9 @@ def get_alerts(bot: TeleBot, message):
                 soil_humidity = alert.get("soil_humidity", "Dato no disponible")
 
                 result += (
-                    f"  - Temperatura: {temperature}°C\n"
-                    f"  - Humedad: {air_humidity}%\n"
-                    f"  - Humedad del suelo: {soil_humidity}%\n\n"
+                    f" 🌡️Temperatura: {temperature}°C\n"
+                    f" 💧Humedad: {air_humidity}%\n"
+                    f" 🌱Humedad del suelo: {soil_humidity}%\n\n"
                 )
             else:
                 result += "👩‍🌾 Senda\nAlerta:\n  - Dato no disponible\n\n"
@@ -97,7 +97,7 @@ def get_sensor(bot: TeleBot, message):
         result = sensor_analysis(data)
         bot.reply_to(message,result)
     else:
-        bot.reply_to(message, "👩‍🌾 Senda\nOcurrió un error al obtener el análisis.")
+        bot.reply_to(message, "👩‍🌾 ¡Ups! Parece que hubo un pequeño error al obtener el análisis.")
 
 def get_trend(bot: TeleBot, message):
     send_initial_message = lambda: bot.reply_to(message, "👩‍🌾 Senda\nRealizando análisis...")
@@ -108,7 +108,7 @@ def get_trend(bot: TeleBot, message):
         result =  analyze_trends(data)
         bot.reply_to(message, result)
     else:
-        bot.reply_to(message, "Ocurrió un error al obtener el análisis.")
+        bot.reply_to(message, "👩‍🌾 ¡Ups! Parece que hubo un pequeño error al obtener el análisis.")
 
 def get_analyze(bot: TeleBot, message):
     send_initial_message = lambda: bot.reply_to(message, "👩‍🌾 Senda\nRealizando análisis...")
@@ -119,4 +119,4 @@ def get_analyze(bot: TeleBot, message):
         result = compare_sensors(data)
         bot.reply_to(message, result)
     else:
-        bot.reply_to(message, "Ocurrió un error al obtener el análisis.")
+        bot.reply_to(message, "👩‍🌾 ¡Ups! Parece que hubo un pequeño error al obtener el análisis.")
