@@ -7,6 +7,7 @@ from telebot import TeleBot
 load_dotenv()
 GET_READS = os.getenv('GET_READS')
 GET_ALERT = os.getenv('GET_ALERT')
+KNOW= os.getenv('KNOW')
 
 def send_welcome(bot: TeleBot, message):
     
@@ -21,7 +22,9 @@ def send_welcome(bot: TeleBot, message):
         "4. Analiza tendencias temporales:\n"
         "/trend\n"
         "5. Analiza datos de los sensores:\n"
-        "/analyze\n\n"
+        "/analyze\n"
+        f"Más detalles sobre los análisis realizados por Senda aquí:{KNOW}\n\n"
+
     )
     bot.reply_to(message, welcome_message, parse_mode = "Markdown")
 
@@ -37,9 +40,10 @@ def send_option(bot: TeleBot, message):
         "4. Analiza tendencias temporales:\n"
         "/trend\n"
         "5. Analiza datos de los sensores:\n"
-        "/analyze\n\n"
+        "/analyze\n"
+        f"Más detalles sobre los análisis realizados por Senda aquí:{KNOW}\n\n"
     )
-    bot.reply_to(message, options_message)
+    bot.reply_to(message, options_message, parse_mode = "Markdown")
 
 def get_reads(bot: TeleBot, message):
     send_initial_message = lambda: bot.reply_to(message, "👩‍🌾 Senda\nObteniendo la última lectura de cada dispositivo...")
