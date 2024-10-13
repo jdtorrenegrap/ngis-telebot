@@ -70,7 +70,6 @@ def handle_all_messages(message):
                  "4️⃣/trend\n"
                  "5️⃣/analyze\n"
                  )
-
 @app.get("/validate")
 def read_root():
     return {"message": "Bot corriendo"}

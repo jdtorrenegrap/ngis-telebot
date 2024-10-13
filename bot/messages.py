@@ -12,19 +12,18 @@ KNOW= os.getenv('KNOW')
 def send_welcome(bot: TeleBot, message):
     
     welcome_message = (
-        "👩‍🌾¡Hola! Soy Senda, tu asistente. Para obtener información sobre el sistema Ngis, utiliza estos comandos fáciles:\n\n"
-        "1. Obtener las últimas lecturas:\n"
-        "/consult\n"
-        "2. Ver alertas configuradas:\n"
-        "/alert\n"
-        "3. Descubre información del sensor que más datos ha enviado:\n"
-        "/get\n"
-        "4. Analiza tendencias temporales:\n"
-        "/trend\n"
-        "5. Analiza datos de los sensores:\n"
-        "/analyze\n"
-        f"Más detalles sobre los análisis realizados por Senda aquí:{KNOW}\n\n"
-
+                "👩‍🌾¡Hola! Soy Senda, tu asistente. Para obtener información sobre el sistema Ngis, utiliza estos comandos fáciles:\n\n"
+                "1️⃣ Consultar lecturas de sensores:\n"
+                "/consult\n"
+                "2️⃣ Revisar alertas configuradas:\n"
+                "/alert\n"
+                "3️⃣ Obtener información de sensores:\n"
+                "/get\n"
+                "4️⃣ Obtener tendencias de datos:\n"
+                "/trend\n"
+                "5️⃣ Realizar análisis de datos:\n"
+                "/analyze\n"
+                f"📊 Más detalles sobre los análisis realizados por Senda {KNOW}\n\n"
     )
     bot.reply_to(message, welcome_message, parse_mode = "Markdown")
 
@@ -64,7 +63,6 @@ def get_reads(bot: TeleBot, message):
         bot.reply_to(message, result)
     else:
         bot.reply_to(message, "👩‍🌾 Senda\nOcurrió un error al obtener los datos.")
-    send_option(bot, message)
 
 def get_alerts(bot: TeleBot, message):
     send_initial_message = lambda: bot.reply_to(message, "👩‍🌾 Senda\nObteniendo alerta configurada...")
@@ -89,7 +87,6 @@ def get_alerts(bot: TeleBot, message):
         bot.reply_to(message, result)
     else:
         bot.reply_to(message, "👩‍🌾 Senda\nOcurrió un error al obtener la alerta.")
-    send_option(bot, message)
 
 def get_sensor(bot: TeleBot, message): 
     send_initial_message = lambda: bot.reply_to(message, "👩‍🌾 Senda\nRealizando análisis...")
@@ -101,7 +98,6 @@ def get_sensor(bot: TeleBot, message):
         bot.reply_to(message,result)
     else:
         bot.reply_to(message, "👩‍🌾 Senda\nOcurrió un error al obtener el análisis.")
-    send_option(bot, message)
 
 def get_trend(bot: TeleBot, message):
     send_initial_message = lambda: bot.reply_to(message, "👩‍🌾 Senda\nRealizando análisis...")
@@ -113,7 +109,6 @@ def get_trend(bot: TeleBot, message):
         bot.reply_to(message, result)
     else:
         bot.reply_to(message, "Ocurrió un error al obtener el análisis.")
-    send_option(bot, message)
 
 def get_analyze(bot: TeleBot, message):
     send_initial_message = lambda: bot.reply_to(message, "👩‍🌾 Senda\nRealizando análisis...")
@@ -125,4 +120,3 @@ def get_analyze(bot: TeleBot, message):
         bot.reply_to(message, result)
     else:
         bot.reply_to(message, "Ocurrió un error al obtener el análisis.")
-    send_option(bot, message)
