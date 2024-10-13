@@ -1,12 +1,17 @@
 import os
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from dotenv import load_dotenv
-from telebot import TeleBot
+from telebot import TeleBot, types
 from bot.messages import get_analyze, get_sensor, get_trend, send_welcome, get_reads, get_alerts
 
+# Cargar las variables de entorno desde el archivo .env
 load_dotenv()
-TOKEN = os.getenv('TOKEN')
 
+# Obtener las variables de entorno
+TOKEN = os.getenv('TOKEN')
+WEBHOOK_URL = os.getenv('WEBHOOK_URL')
+
+# Verificar que el token se haya cargado correctamente
 if TOKEN is None:
     raise ValueError("El token del bot no se ha encontrado en las variables de entorno.")
 
@@ -15,10 +20,21 @@ app = FastAPI()
 
 @app.on_event("startup")
 async def startup_event():
-    # Iniciar el bot en un hilo separado
-    import threading
-    bot_thread = threading.Thread(target=bot.polling, kwargs={"non_stop": True})
-    bot_thread.start()
+    bot.remove_webhook()
+    bot.set_webhook(url=WEBHOOK_URL)
+
+@app.on_event("shutdown")
+async def shutdown_event():
+    bot.remove_webhook()
+
+@app.post("/webhook")
+async def webhook(request: Request):
+    if request.headers.get('content-type') == 'application/json':
+        json_str = await request.body()
+        update = types.Update.de_json(json_str.decode('utf-8'))
+        bot.process_new_updates([update])
+        return {"status": "ok"}
+    return {"status": "error"}
 
 @bot.message_handler(commands=['start'])
 def handle_start(message):
