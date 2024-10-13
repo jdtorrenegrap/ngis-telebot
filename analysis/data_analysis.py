@@ -22,15 +22,15 @@ def sensor_analysis(data):
     # Formateamos el resultado
     result = "📊 Análisis Descriptivo de Lecturas 📊\n\n"
     result += "🔍 Estadísticas Descriptivas:\n"
-    result += f"  - **Número de Lecturas:** {stats['count']:.0f} lecturas registradas\n"
-    result += f"  - **Promedio de Valores:** {stats['mean']:.2f} - Este es el valor medio de todas las lecturas\n"
-    result += f"  - **Desviación Estándar:** {stats['std']:.2f} - Indica cuánto varían las lecturas respecto al promedio\n"
-    result += f"  - **Valor Mínimo:** {stats['min']:.2f} - La lectura más baja registrada\n"
-    result += f"  - **Percentil 25:** {stats['25%']:.2f} - El 25% de las lecturas son menores que este valor\n"
-    result += f"  - **Mediana (Percentil 50):** {stats['50%']:.2f} - El valor medio que separa las lecturas en dos mitades\n"
-    result += f"  - **Percentil 75:** {stats['75%']:.2f} - El 75% de las lecturas son menores que este valor\n"
-    result += f"  - **Valor Máximo:** {stats['max']:.2f} - La lectura más alta registrada\n\n"
-    result += f"📈 **El sensor que más datos recolectó fue:** {sensor_plus_data}\n"
+    result += f"  - Número de Lecturas: {stats['count']:.0f} lecturas registradas\n"
+    result += f"  - Promedio de Valores: {stats['mean']:.2f} - Este es el valor medio de todas las lecturas\n"
+    result += f"  - Desviación Estándar: {stats['std']:.2f} - Indica cuánto varían las lecturas respecto al promedio\n"
+    result += f"  - Valor Mínimo: {stats['min']:.2f} - La lectura más baja registrada\n"
+    result += f"  - Percentil 25: {stats['25%']:.2f} - El 25% de las lecturas son menores que este valor\n"
+    result += f"  - Mediana (Percentil 50): {stats['50%']:.2f} - El valor medio que separa las lecturas en dos mitades\n"
+    result += f"  - Percentil 75: {stats['75%']:.2f} - El 75% de las lecturas son menores que este valor\n"
+    result += f"  - Valor Máximo: {stats['max']:.2f} - La lectura más alta registrada\n\n"
+    result += f"📈 El sensor que más datos recolectó fue: {sensor_plus_data}\n"
     return result
 
 def analyze_trends(data):
@@ -57,11 +57,11 @@ def analyze_trends(data):
     result = "Tendencias Temporales por Sensor y Unidad\n\n"
     for _, row in overall_trends.iterrows():
         result += (
-            f"🔧 **Sensor:** {row['device_id']}, **Unidad:** {row['unit_id']}\n"
-            f"  - 📅 **Promedio Diario:** {row['mean']:.2f} - Este es el promedio de las lecturas diarias.\n"
-            f"  - 📉 **Valor Mínimo Diario:** {row['min']:.2f} - La lectura más baja registrada en el día.\n"
-            f"  - 📈 **Valor Máximo Diario:** {row['max']:.2f} - La lectura más alta registrada en el día.\n"
-            f"  - 📊 **Desviación Estándar Diaria:** {row['std']:.2f} - Indica la variabilidad de las lecturas diarias.\n\n"
+            f"Sensor: {row['device_id']}, Unidad: {row['unit_id']}\n"
+            f"  - 📅 Promedio Diario: {row['mean']:.2f} - Este es el promedio de las lecturas diarias.\n"
+            f"  - 📉 Valor Mínimo Diario: {row['min']:.2f} - La lectura más baja registrada en el día.\n"
+            f"  - 📈 Valor Máximo Diario: {row['max']:.2f} - La lectura más alta registrada en el día.\n"
+            f"  - 📊 Desviación Estándar Diaria: {row['std']:.2f} - Indica la variabilidad de las lecturas diarias.\n\n"
         )
     return result
 
@@ -75,21 +75,21 @@ def compare_sensors(data):
     anova_result = f_oneway(*grouped)  # Realizar la prueba ANOVA
     
     # Formateamos el resultado
-    result = "📊 **Comparación entre Sensores** 📊\n\n"
-    result += "🔍 **Resultados de la Prueba ANOVA:**\n"
-    result += f"  - **Estadístico F:** {anova_result.statistic:.2f} - Mide la variabilidad entre los grupos.\n"
-    result += f"  - **Valor p:** {anova_result.pvalue:.2e} - Indica la probabilidad de que las diferencias sean aleatorias.\n\n"
+    result = "📊 Comparación entre Sensores 📊\n\n"
+    result += "🔍 Resultados de la Prueba ANOVA:\n"
+    result += f"  - Estadístico F: {anova_result.statistic:.2f} - Mide la variabilidad entre los grupos.\n"
+    result += f"  - Valor p: {anova_result.pvalue:.2e} - Indica la probabilidad de que las diferencias sean aleatorias.\n\n"
 
     if anova_result.pvalue < 0.05:
-        result += "✅ **Conclusión:** Hay diferencias significativas entre los sensores.\n\n"
-        result += "📋 **Detalles por Sensor:**\n"
+        result += "✅ Conclusión: Hay diferencias significativas entre los sensores.\n\n"
+        result += "📋 Detalles por Sensor:\n"
         for sensor, values in grouped.items():
             result += (
-                f"  - **Sensor {sensor}:**\n"
-                f"    - **Número de Lecturas:** {len(values)}\n"
-                f"    - **Promedio:** {pd.Series(values).mean():.2f} - El valor promedio de las lecturas.\n"
-                f"    - **Desviación Estándar:** {pd.Series(values).std():.2f} - Indica la variabilidad de las lecturas.\n\n"
+                f"  - Sensor {sensor}:\n"
+                f"    - Número de Lecturas: {len(values)}\n"
+                f"    - Promedio: {pd.Series(values).mean():.2f} - El valor promedio de las lecturas.\n"
+                f"    - Desviación Estándar: {pd.Series(values).std():.2f} - Indica la variabilidad de las lecturas.\n\n"
             )
     else:
-        result += "❌ **Conclusión:** No hay diferencias significativas entre los sensores.\n"
+        result += "❌ Conclusión: No hay diferencias significativas entre los sensores.\n"
     return result
