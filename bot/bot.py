@@ -57,16 +57,21 @@ def handle_get_trend(message):
 def handle_get_analyze(message):
     get_analyze(bot, message)
 
-@bot.message_handler(func=lambda message: True)
+bot.message_handler(func=lambda message: True)
 def handle_all_messages(message):
-    bot.reply_to(message, "👩‍🌾 Senda\n¡Oh no! No reconozco ese comando. Por favor, elige uno de los siguientes para que pueda ayudarte:\n\n"
-                     "1️⃣ /consult  - Consulta información\n"
-                     "2️⃣ /alert    - Establece alertas\n"
-                     "3️⃣ /get      - Obtén datos\n"
-                     "4️⃣ /trend    - Ver tendencias\n"
-                     "5️⃣ /analyze  - Realiza un análisis\n\n"
-                     "¡Estoy aquí para ayudarte en lo que necesites!")
-
+    bot.reply_to(message,
+                "👩‍🌾 Senda\nNo reconozco ese comando. Por favor, usa uno de los siguientes comandos:\n\n"
+                "1️⃣ Consultar lecturas de sensores:\n"
+                "/consult\n"
+                "2️⃣ Revisar alertas configuradas:\n"
+                "/alert\n"
+                "3️⃣ Obtener información de sensores:\n"
+                "/get\n"
+                "4️⃣ Obtener tendencias de datos:\n"
+                "/trend\n"
+                "5️⃣ Realizar análisis de datos:\n"
+                "/analyze\n\n"
+                "¡Estoy aquí para ayudarte en lo que necesites!")
 @app.get("/validate")
 def read_root():
     return {"message": "Bot corriendo"}

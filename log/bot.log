@@ -1,0 +1,31 @@
+2024-10-15 12:49:31,932 - ERROR - Threaded polling exception: A request to the Telegram API was unsuccessful. Error code: 400. Description: Bad Request: message to be replied not found
+2024-10-15 12:49:31,935 - ERROR - Exception traceback:
+Traceback (most recent call last):
+  File "C:\Users\jesus\AppData\Local\Programs\Python\Python312\Lib\site-packages\telebot\__init__.py", line 1235, in __threaded_polling
+    self.worker_pool.raise_exceptions()
+  File "C:\Users\jesus\AppData\Local\Programs\Python\Python312\Lib\site-packages\telebot\util.py", line 150, in raise_exceptions
+    raise self.exception_info
+  File "C:\Users\jesus\AppData\Local\Programs\Python\Python312\Lib\site-packages\telebot\util.py", line 93, in run
+    task(*args, **kwargs)
+  File "C:\Users\jesus\AppData\Local\Programs\Python\Python312\Lib\site-packages\telebot\__init__.py", line 8945, in _run_middlewares_and_handler
+    result = handler['function'](message)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\jesus\OneDrive\Escritorio\SDC\ngis-telebot\bot\bot.py", line 25, in handle_start
+    send_welcome(bot, message)
+  File "C:\Users\jesus\OneDrive\Escritorio\SDC\ngis-telebot\bot\messages.py", line 28, in send_welcome
+    bot.reply_to(message, welcome_message, parse_mode = "Markdown")
+  File "C:\Users\jesus\AppData\Local\Programs\Python\Python312\Lib\site-packages\telebot\__init__.py", line 5803, in reply_to
+    return self.send_message(message.chat.id, text, reply_parameters=reply_parameters, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\jesus\AppData\Local\Programs\Python\Python312\Lib\site-packages\telebot\__init__.py", line 1775, in send_message
+    apihelper.send_message(
+  File "C:\Users\jesus\AppData\Local\Programs\Python\Python312\Lib\site-packages\telebot\apihelper.py", line 273, in send_message
+    return _make_request(token, method_url, params=payload, method='post')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\jesus\AppData\Local\Programs\Python\Python312\Lib\site-packages\telebot\apihelper.py", line 168, in _make_request
+    json_result = _check_result(method_name, result)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\jesus\AppData\Local\Programs\Python\Python312\Lib\site-packages\telebot\apihelper.py", line 195, in _check_result
+    raise ApiTelegramException(method_name, result, result_json)
+telebot.apihelper.ApiTelegramException: A request to the Telegram API was unsuccessful. Error code: 400. Description: Bad Request: message to be replied not found
+

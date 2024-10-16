@@ -71,16 +71,33 @@ def get_alerts(bot: TeleBot, message):
     alert_data = fetch_data(GET_ALERT)
     if alert_data:
         result = "👩‍🌾 Senda\nAlertas Configuradas:\n\n"
+
+        threshold_map={
+            1:">",
+            2:"<",
+            3:"="
+        }
+
+        def get_threshold_operator(threshold_id):
+            return threshold_map.get(threshold_id, "N/A")
+        
         for alert in alert_data:
             if isinstance(alert, dict):  # Verifico si es un diccionario
                 temperature = alert.get("temperature", "Dato no disponible")
                 air_humidity = alert.get("air_humidity", "Dato no disponible")
                 soil_humidity = alert.get("soil_humidity", "Dato no disponible")
-
+                temperature_threshold_id = alert.get("temperature_threshold_id", "Dato no disponible")
+                air_humidity_threshold_id = alert.get("air_humidity_threshold_id", "Dato no disponible")
+                soil_humidity_threshold_id =  alert.get("soil_humidity_threshold_id", "Dato no disponible")
+                
+                temperature_threshold = get_threshold_operator(temperature_threshold_id)
+                air_humidity_threshold = get_threshold_operator(air_humidity_threshold_id)
+                soil_humidity_threshold = get_threshold_operator(soil_humidity_threshold_id)
+ 
                 result += (
-                    f" 🌡️Temperatura: {temperature}°C\n"
-                    f" 💧Humedad: {air_humidity}%\n"
-                    f" 🌱Humedad del suelo: {soil_humidity}%\n\n"
+                    f" 🌡️Temperatura: {temperature_threshold}{temperature}°C\n"
+                    f" 💧Humedad: {air_humidity_threshold}{air_humidity}%\n"
+                    f" 🌱Humedad del suelo: {soil_humidity_threshold}{soil_humidity}%\n\n"
                 )
             else:
                 result += "👩‍🌾 Senda\nAlerta:\n  - Dato no disponible\n\n"
